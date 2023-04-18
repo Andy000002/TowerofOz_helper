@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"
+    integrity="sha512-pumBsjNRGGqkPzKHndZMaAG+bir374sORyzM3uulLV14lN5LyykqNk8eEeUlUkB3U0M4FApyaHraT65ihJhDpQ=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.css" rel="stylesheet" />
+  <link rel="icon" href="https://i.imgur.com/nMsyExW.png" type="image/x-icon">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"></script>
+  <style type="text/css">
+    body {
+      background-color: rgb(232, 241, 255);
+      width: 100%;
+      margin: 0px;
+      display: block;
+      font-family: "Microsoft JhengHei";
+    }
+
+    /* title */
+    .collapseBtn {
+      background-color: #d7d7d7;
+      color: #444;
+      cursor: pointer;
+      padding: 5px;
+      width: 100%;
+      border: none;
+      text-align: left;
+      outline: none;
+      font-size: 30px;
+      height: 60px;
+    }
+
+    /* TXT */
+    .section {
+      /* background-color: aliceblue; */
+      margin-left: 10px;
+      font-size: 30px;
+      border-width: 1px;
+      display: block;
+    }
+
+    /* href */
+    a {
+      text-decoration: none;
+    }
+
+    /* 23 */
+    #Img23-1 {
+      position: relative;
+      height: 150px;
+      left: -10px
+    }
+
+    #Img23-2 {
+      position: relative;
+      height: 150px;
+      left: -380px;
+    }
+
+    #Img23-3 {
+      position: relative;
+      height: 150px;
+      left: -640px;
+    }
+
+    .ImgCrop23 {
+      width: 350px;
+      height: 150px;
+      overflow: hidden;
+      border: 5px#b8d6fe solid;
+      display: inline-block;
+      margin: 0px
+    }
+
+    #ImgCropSpec {
+      width: 250px;
+    }
+
+    .embedTxt {
+      position: absolute;
+      font-size: 25px;
+      z-index: 100;
+      font-weight: bold;
+    }
+
+
+    .collapseBtn:hover {
+      background-color: #b2b2b2;
+    }
+
+
+    /* 24 */
+    table,
+    td {
+      border: 1px solid black;
+      border-collapse: collapse;
+    }
+
+    tr:not(.BgmClass):hover {
+      background-color: #8caae3;
+    }
+
+    td b {
+      font-size: 20px;
+    }
+
+    #bgm24 {
+      font-size: 10px;
+    }
+
+    .BgmClass {
+      background-color: #b8d6fe;
+      font-weight: bolder;
+      text-align: center;
+      font-size: 15px;
+    }
+
+    .BgmName {
+      font-size: 15px;
+      font-weight: bold;
+    }
+
+    /* 36 */
+    #Btn36 {
+      display: inline-block;
+    }
+
+    #Btn36 button {
+      width: 70px;
+      height: 60px;
+      font-size: 30px;
+      margin: 5px;
+      border-radius: 10px;
+      background-color: #b8d6fe;
+    }
+
+    #Btn36 button:hover {
+      background-color: #8caae3;
+    }
+
+    #Btn36Ans input {
+      width: 50px;
+      height: 50px;
+      text-align: center;
+      font-size: 40px;
+      font-weight: bold;
+    }
+
+    /* 42 */
+    #Map42 {
+      position: relative;
+      height: 180px;
+      width: 400px;
+      /* top: -100px; */
+      left: -10px;
+      overflow: hidden;
+    }
+
+    #Map42 img {
+      position: absolute;
+      top: -35px;
+      left: -6px;
+      width: 400px;
+    }
+
+    #Map42-2 {
+      width: 350px;
+    }
+
+    /* 47 */
+    #Moon47 {
+      width: 350px;
+    }
+
+    #Ref {
+      background-color: rgb(218, 231, 252);
+      color: rgb(200, 200, 200);
+      font-size: 5px;
+    }
+    @media only screen and (max-width:400px){
+      #Map42 {
+      position: relative;
+      height: 180px;
+      width: 370px;
+      left: -10px;
+      overflow: hidden;
+    }
+    .section {
+      margin-left: 0px;
+    }
+    }
+  </style>
+  <script>
+    var Ans = ""
+    $(document).ready(() => {
+      // title Collapse
+      $('.collapseBtn').each((i, element) => {
+        element.addEventListener("click", () => {
+          //▼▲
+          if (element.nextElementSibling.style.display == 'none') {
+            element.innerHTML = element.innerHTML.replace('▲', '▼');
+            element.nextElementSibling.style.display = 'block';
+          }
+          else {
+            element.innerHTML = element.innerHTML.replace('▼', '▲');
+            element.nextElementSibling.style.display = 'none';
+          }
+        })
+      })
+      // copy bgmName & toastr
+      toastr.options = {
+        "closeButton": false,
+        "debug": false,
+        "newestOnTop": false,  // 最新一筆顯示在最上面
+        "progressBar": true, // 顯示隱藏時間進度條
+        "positionClass": "toast-bottom-right", // 位置的類別
+        "preventDuplicates": false, // 隱藏重覆訊息
+        "onclick": null, // 當點選提示訊息時，則執行此函式
+        "showDuration": "100", // 顯示時間(單位: 毫秒)
+        "hideDuration": "100", // 隱藏時間(單位: 毫秒)
+        "timeOut": "3000", // 當超過此設定時間時，則隱藏提示訊息(單位: 毫秒)
+        "extendedTimeOut": "1000", // 當使用者觸碰到提示訊息時，離開後超過此設定時間則隱藏提示訊息(單位: 毫秒)
+        "showEasing": "linear", // 顯示動畫時間曲線 swing, linear
+        "hideEasing": "linear", // 隱藏動畫時間曲線 swing, linear
+        "showMethod": "slideDown", // 顯示動畫效果 show, fadeIn, slideDown
+        "hideMethod": "slideUp" // 隱藏動畫效果 hide, fadeOut, slideUp
+      }
+      $('tr:not(.BgmClass)').each((i, element) => {
+        element.addEventListener("click", () => {
+          let tar = element.children[0].innerHTML
+          navigator.clipboard.writeText(tar);
+          toastr.success("<b>" + tar + "</b> 已複製");
+        })
+      })
+      // 36
+      function RefreshForm() {
+        console.log(Ans)
+        $('#Btn36Ans input').each((i, element) => {
+          if (i < Ans.length) {
+            element.value = Ans[i];
+          }
+          else {
+            element.value = ""
+          }
+        })
+      }
+      $('#Btn36 button').each((i, element) => {
+        element.addEventListener("click", () => {
+          if (i < 4 && Ans.length < 8) {
+            Ans += String(i + 1);
+            RefreshForm();
+          }
+          else if (i == 4 && Ans.length > 0) {
+            Ans = Ans.slice(0, -1);
+            RefreshForm();
+          }
+        })
+      })
+      $('#Btn36Ans input').each((i, element) => {
+        element.onkeyup = () => {
+          if (element.value.length == 1 && i != 7) {
+            if (i < 3 || i > 3) {
+              element.nextElementSibling.focus()
+            }
+            else if (i == 3) {
+              element.nextElementSibling.nextElementSibling.focus()
+            }
+
+            Ans += element.value
+            console.log(element, Ans)
+          }
+          else if (element.value.length == 0 && i != 0) {
+            if (i > 4 || i < 4) {
+              element.previousElementSibling.focus()
+            }
+            else if (i == 4) {
+              element.previousElementSibling.previousElementSibling.focus()
+            }
+            Ans = Ans.slice(0, -1)
+          }
+        }
+      })
+    })
+    
+  </script>
+  <title>Seed</title>
+</head>
+
+<body>
+  <button type="button" class="collapseBtn">▼1-4</button>
+  <div class="section" id="1">
+    1 打大水靈<br>
+    2 撿牌比大小<br>
+    3 撿1000龍蛋<br>
+    4 維持平衡<br>
+  </div>
+  <button type="button" class="collapseBtn">▼6-14</button>
+  <div class="section" id="6">
+    6 打300綠水靈<br>
+    7 猴子忍耐<br>
+    8 打100火山蟲<br>
+    9 猜<br>
+    10 Boss蜘蛛<br>
+    11 打300石巨人<br>
+    12 忍耐 陷阱跳 踩黑線<br>
+    13 打80怪 小心落石<br>
+    14 射<br>
+  </div>
+  <button type="button" class="collapseBtn">▼16-24</button>
+  <div class="section" id="16">
+    16 打200鱷魚<br>
+    17 忍耐 3繩 2刺<br>
+    18 撿10椰子 打樹<br>
+    19 忍耐 小心球<br>
+    20 Boss樵夫<br>
+    21 打200獨角獅<br>
+    22 <a href="https://forum.gamer.com.tw/C.php?bsn=7650&snA=918980" target="_blank">雲朵忍耐</a> <span
+      style="color: red;font-weight: bold;">掉了+1分鐘</span><br>
+    23 隱形忍耐<br>
+    <span class="ImgCrop23">
+      <span class="embedTxt">下1跳7 下1跳1</span>
+      <img src="https://xnum.github.io/MStoweroz/images/23.png" id="Img23-1" draggable="false">
+    </span>
+    <span class="ImgCrop23" id="ImgCropSpec">
+      <span class="embedTxt">跳2 下1跳3</span>
+      <img src="https://xnum.github.io/MStoweroz/images/23.png" id="Img23-2" draggable="false">
+    </span>
+    <span class="ImgCrop23">
+      <span class="embedTxt">下2跳1 下1跳4 下1跳2</span>
+      <img src="https://xnum.github.io/MStoweroz/images/23.png" id="Img23-3" draggable="false">
+    </span><br>
+    24 BGM 點擊複製<br>
+    <div id="bgm24">
+      <table>
+        <tbody>
+          <tr>
+          <tr class="BgmClass">
+            <td colspan="2">狀聲詞</td>
+          </tr>
+          <tr>
+            <td class="BgmName">地球防衛總部</td>
+            <td><b>砰砰砰砰!</b>我手持雷射槍，正在和外星生物戰鬥!</td>
+          </tr>
+          <tr>
+            <td class="BgmName">冰原雪域</td>
+            <td><b>嗯</b>，感覺好像企鵝和野狼好像在平原上碎步跑著。</td>
+          </tr>
+          <tr>
+            <td class="BgmName">童話村</td>
+            <td><b>嗯嗯</b>，感覺就像在草屋檐廊下，躺在奶奶的膝上聽他說著傳統童話。</td>
+          </tr>
+          <tr>
+            <td class="BgmName">神木村</td>
+            <td><b>哇</b>，感覺就像騎著<b>龍</b>在晴空飛翔!</td>
+          </tr>
+          <tr>
+            <td class="BgmName">水世界</td>
+            <td><b>哇</b>，這輕快的節奏，感覺就像和魚群一起在<b>海中</b>游玩。</td>
+          </tr>
+          <tr>
+            <td class="BgmName">水晶花園</td>
+            <td><b>哇</b>，搭著<b>華麗的船</b>飛上天了!彷彿變成超級有錢人般，有一種威風凜凜的感覺。</td>
+          </tr>
+          <tr class="BgmClass">
+            <td colspan="2">感覺</td>
+          </tr>
+          <tr>
+            <td class="BgmName">櫻花處</td>
+            <td>感覺<b>妖精</b>們會在花團錦簇的樹下入睡。</td>
+          </tr>
+          <tr>
+            <td class="BgmName">尖耳狐狸村</td>
+            <td>感覺可愛的<b>狐狸</b>會豎起耳朵從草叢中出現。</td>
+          </tr>
+          <tr>
+            <td class="BgmName">維多利亞港</td>
+            <td>感覺就像在看得見碧海的<b>碼頭</b>看著海鷗四處飛翔。</td>
+          </tr>
+          <tr>
+            <td class="BgmName">玩具城</td>
+            <td>感覺就像來到可愛的玩具和機器人四處走動的<b>玩具城</b>。</td>
+          </tr>
+          <tr>
+            <td class="BgmName">桃花仙境</td>
+            <td>感覺憨厚的<b>熊</b>好像會一大清早就很有活力地進行修練。</td>
+          </tr>
+          <tr>
+            <td class="BgmName">天空之城</td>
+            <td>感覺天使會展開翅膀，在<b>飄浮在半空中的城</b>裡四處飛翔。</td>
+          </tr>
+          <tr>
+            <td class="BgmName">墮落城市</td>
+            <td>感覺小偷會在<b>施工中的城市</b>某處溜達，覬覦著某人的錢包。</td>
+          </tr>
+          <tr>
+            <td class="BgmName">勇士之村</td>
+            <td>感覺就像在吹著<b>荒涼之風</b>的荒地中央遇見悲壯的戰鬥民族。</td>
+          </tr>
+          <tr>
+            <td class="BgmName">奇幻村</td>
+            <td>感覺就像進入<b>沉睡的巨樹</b>之中，總覺得有股熟悉的感覺耶?</td>
+          </tr>
+          <tr>
+            <td class="BgmName">靈藥幻境</td>
+            <td>感覺就像化身為採藥人，來到迷霧環繞的村中採掘千年<b>神秘藥草</b>。</td>
+          </tr>
+          <tr>
+            <td class="BgmName">瑪迦提亞城</td>
+            <td>感覺就像在隱藏著陰謀的<b>暗巷</b>中尋找某個失蹤的人，充滿緊張感。</td>
+          </tr>
+          <tr class="BgmClass">
+            <td colspan="2">標點位置</td>
+          </tr>
+          <tr>
+            <td class="BgmName">埃德爾斯坦</td>
+            <td><b>敲敲打打</b>。機械工好像在製造什麼!</td>
+          </tr>
+          <tr>
+            <td class="BgmName">耶雷弗</td>
+            <td>慵懶的午後，<b>神獸和女皇</b>似乎在美麗的庭園中彼此倚靠躺著休息。</td>
+          </tr>
+          <tr>
+            <td class="BgmName">魔法森林</td>
+            <td>充滿神秘的感覺。我現在是不是在妖精居住的<b>森林</b>裡呢?</td>
+          </tr>
+          <tr>
+            <td class="BgmName">弓箭手村</td>
+            <td>清脆輕快的音樂。感覺就像<b>菇菇</b>在山丘上跑跑跳跳。</td>
+          </tr>
+          <tr>
+            <td class="BgmName">納希綠洲城</td>
+            <td>在豔陽高照的<b>沙漠</b>下，感覺眼鏡蛇會悄悄爬出甕子。</td>
+          </tr>
+          <tr>
+            <td class="BgmName">瑞恩村</td>
+            <td>在這四周被冰覆蓋的<b>冰河之村</b>裡，企鵝悠哉地釣著魚。</td>
+          </tr>
+          <tr>
+            <td class="BgmName">萬神殿</td>
+            <td>彷彿穿越浩瀚的宇宙來到<b>其他行星</b>般，有一種來到新天地旅行的感覺。</td>
+          </tr>
+          <tr>
+            <td class="BgmName">赫力席母奪回總部</td>
+            <td>英勇的勇士似乎想以悲壯之姿<b>奪回</b>城池，有一股雄壯的感覺。</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <button type="button" class="collapseBtn">▼26-34</button>
+  <div class="section" id="26">
+    26 召喚打300水靈 可站2層點祭壇<br>
+    27 忍耐 記得回血 兩草叢可瞬<br>
+    28 打蛇蜥蜴 敲樹<br>
+    29 丟結晶<br>
+    30 Boss獅子<br>
+    31 打200食蟲綠水靈<br>
+    32 跳打水靈<br>
+    33 鑰匙迷宮<br>
+    34 打牛仔撿10皮革<br>
+
+  </div>
+  <button type="button" class="collapseBtn">▼36-44</button>
+  <div class="section" id="36">
+    36 8個暗號<br>
+    <div id="Btn36">
+      <button>1</button><button>2</button><button>3</button><button>4</button><button>Del</button><br>
+      <form id="Btn36Ans">
+        <input maxlength="1" />
+        <input maxlength="1" />
+        <input maxlength="1" />
+        <input maxlength="1" /><br>
+        <input maxlength="1" />
+        <input maxlength="1" />
+        <input maxlength="1" />
+        <input maxlength="1" />
+      </form>
+    </div><br>
+    37 打100怪四種<br>
+    38 對話 打目標怪<br>
+    39 <a href="https://forum.gamer.com.tw/Co.php?bsn=7650&sn=6403776" target="_blank">問題 題庫</a><br>
+    40 稻草人<br>
+    41 簡單忍耐<br>
+    42 草往右能踩 兩條路線
+    <div id="Map42">
+      <img src="https://i.imgur.com/fWFm7JO.png" draggable="false">
+      <img src="https://i.imgur.com/fl7MOcF.png" draggable="false">
+      <img src="https://i.imgur.com/EPkbuz3.png" draggable="false">
+      <img src="https://i.imgur.com/OUsZMsD.png" draggable="false">
+    </div>
+    <img id="Map42-2" src="https://mapleutils.com/_next/image?url=%2Fimages%2Fseed%2F42%2Fend.png&w=1080&q=75"
+      draggable="false"><br>
+    43 飛鏢忍耐<br>
+    44 簡單忍耐<br>
+  </div>
+  <button type="button" class="collapseBtn">▼46-50</button>
+  <div class="section" id="46">
+    46 打200翼龍<br>
+    47 撞月亮<br>
+    <img id="Moon47"
+      src="https://cdn.discordapp.com/attachments/961290523589623828/965666748793749565/3489e5452b6a2503.png"
+      draggable="false"><br>
+    48 <a href="https://youtu.be/lOtZsVnV9ss" target="_blank">OBS</a> <a href="https://youtu.be/JP5XwPHVHCA"
+      target="_blank">YT1</a> <a href="https://youtu.be/7ebbAmM83PE" target="_blank">YT2</a><br>
+    49 <a href="https://home.gamer.com.tw/creationDetail.php?sn=4760340">猜剪影 看題庫</a><br>
+    50 Boss 桃樂絲
+  </div>
+  <div>
+    <div id="Ref">
+      Ref<br>
+      http://xnum.github.io/MStoweroz/<br>
+      https://mapleutils.com/en/seed/42<br>
+      https://home.gamer.com.tw/artwork.php?sn=5440884<br>
+      <span style="display: none;">By Andy000002</span>
+    </div>
+  </div>
+</body>
+
+</html>
